@@ -6,7 +6,7 @@ o Continuous Integration, Continuous Delivery i Continuous Deployment.
 - Rozpoczynając pracę z projektem (wykorzystując virtualenv). Hermetyczne środowisko dla pojedynczej aplikacji w python-ie:
 
   ```
-  # centos, add to ~/.bashrc
+  # centos, add to ~/.bashrc (nie dotyczy ubuntu)
   $ source /usr/bin/virtualenvwrapper.sh
 
   # ubuntu, add to ~/.bashrc
@@ -16,6 +16,10 @@ o Continuous Integration, Continuous Delivery i Continuous Deployment.
   $ mkvirtualenv wsb-simple-flask-app
   $ pip install -r requirements.txt
   $ pip install -r test_requirements.txt
+
+  #albo wykonujemy
+  $make deps
+  #wykonywana jest wtedy zawartosc deps z Makefile
   ```
 
   Sprawdź: [documentację virtualenvwrappera](https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html)s oraz [biblioteki flask](http://flask.pocoo.org).
@@ -33,7 +37,8 @@ o Continuous Integration, Continuous Delivery i Continuous Deployment.
 - Uruchamianie testów (see: http://doc.pytest.org/en/latest/capture.html):
 
   ```
-  $ PYTHONPATH=. py.test
+  $ PYTHONPATH=. py.test  
+  #albo:
   $ PYTHONPATH=. py.test  --verbose -s
   ```
 
@@ -52,7 +57,26 @@ o Continuous Integration, Continuous Delivery i Continuous Deployment.
 - Integracja z TravisCI:
 
   ```
-  # miejsce na twoje notatki
+
+  utworzyc plik: .travis.yml
+
+  w pliku wpisac:
+
+  language: python
+  services:
+      - docker
+  python:
+      - "2.7"
+  install:
+      - make deps
+  script:
+      - make test
+      - make lint
+  after_success:
+      - make docker_build
+
+adres travis-ci: https://travis-ci.org/
+logowanie jak do GIT-a
   ```
 
 
@@ -81,6 +105,8 @@ o Continuous Integration, Continuous Delivery i Continuous Deployment.
   ```
 
 - Instalacja docker-a:
+
+docker pracuje na root'cie (sudo su)
 
   ```
   $ yum remove docker \
