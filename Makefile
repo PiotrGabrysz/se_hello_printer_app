@@ -18,8 +18,18 @@ lint:
 docker_build:
 	docker build -t hello-world-printer .
 
+
 docker_run: docker_build
 		docker run \
 		--name hello_world_printer-dev \
 		-p 5000:5000 \
 		-d hello-world-printer
+
+USERNAME=pigabr
+TAG=$(USERNAME)/hello-world-printer
+
+docker_push:
+		@docker login --username $(USERNAME) --password $${DOCKER_PASSWORD}; \
+		docker tag hello-world-printer $(TAG); \
+		docker push $(TAG); \
+		docker logout;
